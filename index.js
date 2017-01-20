@@ -60,25 +60,35 @@ exports.decorateHyper = (HyperTerm, { React, notify }) => {
             background-image: none !important;
           }
           .tab_tab {
-            border-width: 0px !important;
-            border-right: 0px solid transparent !important;
-            border-left: 1px solid ${BRIGHT_GREEN} !important;
+            border: 3px dashed rgb(${TEXT_GREEN});
+            height: 40px;
           }
           .tab_tab:not(.tab_active) {
             color: rgba(${TEXT_GREEN}, 0.7);
           }
           .tab_tab.tab_active {
-            height: calc(100% + 1px);
             ${noiseCss}
-            border-left: 0px solid ${BRIGHT_GREEN} !important;
             ${textShadow}
             font-weight: bold;
             color: rgb(${TEXT_GREEN});
+            border: 3px double rgb(${TEXT_GREEN});
           }
-          /* Hide hardcoded black bottom border */
-          .tab_active:before {
-            border-bottom: none !important;
-            border-left: 1px solid transparent !important;
+          .terms_termsShifted {
+            margin-top: 74px;
+          }
+          .tab_icon {
+            color: rgb(${TEXT_GREEN});
+            font-style: normal;
+            line-height: 14px;
+          }
+          .tab_icon:before {
+            content: "\u2716"
+          }
+          .tab_icon:hover {
+            background-color: transparent;
+          }
+          .tab_shape {
+            display: none;
           }
         `,
       };
