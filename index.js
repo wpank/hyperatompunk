@@ -2,6 +2,9 @@ const HUE_SHIFT_INTENSITY = 4;
 const BRIGHT_GREEN = '#28FC91';
 const DARK_GREEN = '#0F2218';
 const TEXT_GREEN = '51, 255, 0';
+const intensities = generateIntensities();
+const TEXT_SHADOW = generateTextShadow(intensities);
+const BOX_SHADOW = generateBoxShadow(intensities);
 
 exports.decorateConfig = (config) => {
   return Object.assign({}, config, {
@@ -16,15 +19,9 @@ exports.decorateHyper = (HyperTerm, { React, notify }) => {
   return class extends React.Component {
     constructor(props, context) {
       super(props, context);
-      this._intervalID = null;
-    }
-
-    componentWillMount() {
-      this._intervalID = setInterval(this._flip, 120);
     }
 
     render() {
-      const textShadow = generateTextShadow();
       const overridenProps = {
         backgroundColor: 'black',
         customCSS: `
@@ -94,6 +91,7 @@ exports.decorateHyper = (HyperTerm, { React, notify }) => {
               opacity: 0.24387;
             }
           }
+          ${TEXT_SHADOW}
           body::after {
             content: " ";
             display: block;
@@ -124,7 +122,7 @@ exports.decorateHyper = (HyperTerm, { React, notify }) => {
           .tabs_nav .tabs_title {
             color: rgb(${TEXT_GREEN}) !important;
             font-weight: bold !important;
-            ${textShadow}
+            animation: textShadow 1.6s infinite;
           }
           .tabs_list {
             background-color: ${DARK_GREEN} !important;
@@ -138,7 +136,7 @@ exports.decorateHyper = (HyperTerm, { React, notify }) => {
             color: rgba(${TEXT_GREEN}, 0.7);
           }
           .tab_tab.tab_active {
-            ${textShadow}
+            animation: textShadow 1.6s infinite;
             font-weight: bold;
             color: rgb(${TEXT_GREEN});
             border: 3px double rgb(${TEXT_GREEN});
@@ -164,10 +162,6 @@ exports.decorateHyper = (HyperTerm, { React, notify }) => {
       };
       return React.createElement(HyperTerm, Object.assign({}, this.props, overridenProps));
     }
-
-    componentWillUnmount() {
-      clearInterval(this._intervalID);
-    }
   }
 }
 
@@ -175,84 +169,58 @@ exports.decorateTerm = (Term, { React, notify }) => {
   return class extends React.Component {
     constructor (props, context) {
       super(props, context);
-      this._drawFrame = this._drawFrame.bind(this);
-      this._onTerminal = this._onTerminal.bind(this);
-      this._injectStyles = this._injectStyles.bind(this);
-      this._div = null;
-      this._body = null;
-      this._globalStyle = null;
-      this._term = null;
-      this._intervalID = null;
-    }
-
-    _onTerminal (term) {
-      if (this.props.onTerminal) this.props.onTerminal(term);
-      this._div = term.div_;
-      this._term = term;
-      this._body = term.cursorNode_.parentElement;
-      this._window = term.document_.defaultView;
-      this._injectStyles();
-      this._intervalID = setInterval(() => {
-        this._window.requestAnimationFrame(this._drawFrame);
-      }, 80);
-    }
-
-    _injectStyles() {
-      if (this._term) {
-        this._term.prefs_.set('background-color', 'transparent');
-        this._term.prefs_.set('background-image', 'none');
-      }
-      this._globalStyle = document.createElement('style');
-      this._globalStyle.setAttribute('type', 'text/css');
-      this._term.scrollPort_.document_.body.appendChild(this._globalStyle);
-    }
-
-    _drawFrame () {
-      const intensity = generateIntensity();
-      const textShadow = generateTextShadow(intensity);
-      const boxShadow = generateBoxShadow(intensity);
-      this._globalStyle.innerHTML = `
-        x-screen {
-          ${textShadow}
-        }
-        .cursor-node {
-          ${boxShadow}
-        }
-      `;
     }
 
     render () {
-      return React.createElement(Term, Object.assign({}, this.props, {
-        onTerminal: this._onTerminal
-      }));
-    }
-
-    componentWillUnmount () {
-      clearInterval(this._intervalID);
+      const overridenProps = {
+        customCSS: `
+        ${this.props.customCSS || ''}
+        ${TEXT_SHADOW}
+        ${BOX_SHADOW}
+        x-screen {
+          animation: textShadow 1.6s infinite;
+        }
+        .cursor-node {
+          animation: boxShadow 1.6s infinite;
+        }
+      `};
+      return React.createElement(Term, Object.assign({}, this.props, overridenProps));
     }
   }
 };
 
-function generateIntensity() {
-  let x = -1 + 2 * Math.random();
-  x = x * x;
-  return HUE_SHIFT_INTENSITY * x;
-}
-
-function generateTextShadow(intensity) {
-  if (intensity === undefined) {
+function generateIntensities() {
+  var result = [];
+  for (let i = 0; i < 101; i+=5) {
     let x = -1 + 2 * Math.random();
     x = x * x;
-    intensity = HUE_SHIFT_INTENSITY * x;
+    result.push(HUE_SHIFT_INTENSITY * x);
   }
-  return `text-shadow: ${intensity}px 0 1px rgba(0,30,255,0.5), ${-intensity}px 0 1px rgba(255,0,80,0.3), 0 0 3px !important;`
+  return result;
 }
 
-function generateBoxShadow(intensity) {
-  if (intensity === undefined) {
-    let x = -1 + 2 * Math.random();
-    x = x * x;
-    intensity = HUE_SHIFT_INTENSITY * x;
+function generateTextShadow(intensities) {
+  var result = '@keyframes textShadow {\n';
+  for (let i = 0; i < intensities.length; i++) {
+    const intensity = intensities[i];
+    result += `${i*5}% {
+      text-shadow: ${intensity}px 0 1px rgba(0,30,255,0.5), ${-intensity}px 0 1px rgba(255,0,80,0.3), 0 0 3px;
+    }
+    `;
   }
-  return `box-shadow: ${intensity}px 0 1px rgba(0,30,255,0.5), ${-intensity}px 0 1px rgba(255,0,80,0.3), 0 0 3px !important;`
+  result += '}\n';
+  return result;
+}
+
+function generateBoxShadow(intensities) {
+  var result = '@keyframes boxShadow {\n';
+  for (let i = 0; i < intensities.length; i++) {
+    const intensity = intensities[i];
+    result += `${i*5}% {
+      box-shadow: ${intensity}px 0 1px rgba(0,30,255,0.5), ${-intensity}px 0 1px rgba(255,0,80,0.3), 0 0 3px;
+    }
+    `;
+  }
+  result += '}\n';
+  return result;
 }
