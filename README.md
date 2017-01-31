@@ -1,6 +1,6 @@
 # hyperatompunk
 
-> Atompunk HyperTerm theme
+> Atompunk HyperTerm theme adding RGB shifting, tab text-borders, and CRT effect
 
 ![](screenshot.png)
 
