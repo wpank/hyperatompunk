@@ -1,15 +1,15 @@
-# hyperpunk
+# hyperatompunk
 
-> Cyberpunk HyperTerm theme
+> Atompunk HyperTerm theme
 
 ![](screenshot.png)
 
 ## Install
 
-Add `hyperpunk` to the plugins list in your `~/.hyperterm.js` config file.
+Add `hyperatompunk` to the plugins list in your `~/.hyperterm.js` config file.
 
-Tip: I recommend using the [AHAMONO](http://freebiesbug.com/free-fonts/ahamono-free-font/) font together with this theme.
+This was originally a fork of [hyperpunk](https://github.com/staltz/hyperpunk) by [Andre Staltz](https://staltz.com)
 
 ## License
 
-MIT, by [Andre Staltz](https://staltz.com)
+MIT
