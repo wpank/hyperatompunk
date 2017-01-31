@@ -1,6 +1,3 @@
-const noise1Png = require('./noise1');
-const noise2Png = require('./noise2');
-const noise3Png = require('./noise3');
 const HUE_SHIFT_INTENSITY = 4;
 const BRIGHT_GREEN = '#28FC91';
 const DARK_GREEN = '#0F2218';
@@ -19,13 +16,7 @@ exports.decorateHyper = (HyperTerm, { React, notify }) => {
   return class extends React.Component {
     constructor(props, context) {
       super(props, context);
-      this.state = { noise: 0 };
-      this._flip = this._flip.bind(this);
       this._intervalID = null;
-    }
-
-    _flip () {
-      this.setState({ noise: (this.state.noise + 1) % 3 });
     }
 
     componentWillMount() {
@@ -33,22 +24,102 @@ exports.decorateHyper = (HyperTerm, { React, notify }) => {
     }
 
     render() {
-      const noisePng = [noise1Png, noise2Png, noise3Png][this.state.noise];
-      const noiseCss = `
-        background-image: ${noisePng};
-        background-size: 100px 100px;
-      `;
       const textShadow = generateTextShadow();
-
       const overridenProps = {
         backgroundColor: 'black',
         customCSS: `
           ${this.props.customCSS || ''}
-          body {
-            ${noiseCss}
+          @keyframes flicker {
+            0% {
+              opacity: 0.27861;
+            }
+            5% {
+              opacity: 0.34769;
+            }
+            10% {
+              opacity: 0.23604;
+            }
+            15% {
+              opacity: 0.90626;
+            }
+            20% {
+              opacity: 0.18128;
+            }
+            25% {
+              opacity: 0.83891;
+            }
+            30% {
+              opacity: 0.65583;
+            }
+            35% {
+              opacity: 0.67807;
+            }
+            40% {
+              opacity: 0.26559;
+            }
+            45% {
+              opacity: 0.84693;
+            }
+            50% {
+              opacity: 0.96019;
+            }
+            55% {
+              opacity: 0.08594;
+            }
+            60% {
+              opacity: 0.20313;
+            }
+            65% {
+              opacity: 0.71988;
+            }
+            70% {
+              opacity: 0.53455;
+            }
+            75% {
+              opacity: 0.37288;
+            }
+            80% {
+              opacity: 0.71428;
+            }
+            85% {
+              opacity: 0.70419;
+            }
+            90% {
+              opacity: 0.7003;
+            }
+            95% {
+              opacity: 0.36108;
+            }
+            100% {
+              opacity: 0.24387;
+            }
           }
-          .tabs_nav {
-            ${noiseCss}
+          body::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(18, 16, 16, 0.1);
+            opacity: 0;
+            z-index: 2;
+            pointer-events: none;
+          	animation: flicker 0.15s infinite;
+          }
+          body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
           }
           .tabs_nav .tabs_title {
             color: rgb(${TEXT_GREEN}) !important;
@@ -67,7 +138,6 @@ exports.decorateHyper = (HyperTerm, { React, notify }) => {
             color: rgba(${TEXT_GREEN}, 0.7);
           }
           .tab_tab.tab_active {
-            ${noiseCss}
             ${textShadow}
             font-weight: bold;
             color: rgb(${TEXT_GREEN});
@@ -138,9 +208,15 @@ exports.decorateTerm = (Term, { React, notify }) => {
     }
 
     _drawFrame () {
+      const intensity = generateIntensity();
+      const textShadow = generateTextShadow(intensity);
+      const boxShadow = generateBoxShadow(intensity);
       this._globalStyle.innerHTML = `
         x-screen {
-          ${generateTextShadow()}
+          ${textShadow}
+        }
+        .cursor-node {
+          ${boxShadow}
         }
       `;
     }
@@ -157,9 +233,26 @@ exports.decorateTerm = (Term, { React, notify }) => {
   }
 };
 
-function generateTextShadow() {
+function generateIntensity() {
   let x = -1 + 2 * Math.random();
   x = x * x;
-  const intensity = HUE_SHIFT_INTENSITY * x;
+  return HUE_SHIFT_INTENSITY * x;
+}
+
+function generateTextShadow(intensity) {
+  if (intensity === undefined) {
+    let x = -1 + 2 * Math.random();
+    x = x * x;
+    intensity = HUE_SHIFT_INTENSITY * x;
+  }
   return `text-shadow: ${intensity}px 0 1px rgba(0,30,255,0.5), ${-intensity}px 0 1px rgba(255,0,80,0.3), 0 0 3px !important;`
+}
+
+function generateBoxShadow(intensity) {
+  if (intensity === undefined) {
+    let x = -1 + 2 * Math.random();
+    x = x * x;
+    intensity = HUE_SHIFT_INTENSITY * x;
+  }
+  return `box-shadow: ${intensity}px 0 1px rgba(0,30,255,0.5), ${-intensity}px 0 1px rgba(255,0,80,0.3), 0 0 3px !important;`
 }

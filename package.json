@@ -1,11 +1,11 @@
 {
-  "name": "hyperpunk",
+  "name": "hyperatompunk",
   "version": "1.2.0",
   "keywords": ["hyperterm"],
-  "description": "Hyperterm extension to make your terminal look Cyberpunk / Sci-fi",
+  "description": "Hyperterm extension to make your terminal look Atompunk",
   "repository": {
     "type": "git",
-    "url": "https://github.com/staltz/hyperpunk.git"
+    "url": "https://github.com/cakenggt/hyperpunk.git"
   },
   "dependencies": {
   }
