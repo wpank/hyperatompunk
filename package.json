@@ -1,13 +1,13 @@
 {
-  "name": "hyperatompunk",
+  "name": "metacosmic",
   "version": "1.1.1",
   "keywords": [
     "hyperterm"
   ],
-  "description": "Hyperterm extension to make your terminal look Atompunk",
+  "description": "Hyperterm extension to make your terminal a e s t h e t i c",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cakenggt/hyperpunk.git"
+    "url": "https://github.com/wpank/metacosmic.git"
   },
   "dependencies": {}
 }
