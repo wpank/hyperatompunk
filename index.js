@@ -1,6 +1,6 @@
 const HUE_SHIFT_INTENSITY = 4;
 const BRIGHT_GREEN = '#00FF00';
-const DARK_GREEN = '#0F2218';
+const DARK_GREEN = '#05120b';
 const TEXT_GREEN = '51, 255, 0';
 const intensities = generateIntensities();
 const TEXT_SHADOW = generateTextShadow(intensities);
