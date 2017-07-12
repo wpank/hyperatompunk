@@ -1,4 +1,4 @@
-# hyperatompunk
+# Metacosmic
 
 > Metacosmic HyperTerm theme adding CRT effects to a classic terminal aesthetic. Fast, and easy to read.
 
