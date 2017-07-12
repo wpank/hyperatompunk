@@ -1,5 +1,5 @@
 const HUE_SHIFT_INTENSITY = 4;
-const BRIGHT_GREEN = '#28FC91';
+const BRIGHT_GREEN = '#00FF00';
 const DARK_GREEN = '#0F2218';
 const TEXT_GREEN = '51, 255, 0';
 const intensities = generateIntensities();
@@ -26,71 +26,7 @@ exports.decorateHyper = (HyperTerm, { React, notify }) => {
         backgroundColor: 'black',
         customCSS: `
           ${this.props.customCSS || ''}
-          @keyframes flicker {
-            0% {
-              opacity: 0.27861;
-            }
-            5% {
-              opacity: 0.34769;
-            }
-            10% {
-              opacity: 0.23604;
-            }
-            15% {
-              opacity: 0.90626;
-            }
-            20% {
-              opacity: 0.18128;
-            }
-            25% {
-              opacity: 0.83891;
-            }
-            30% {
-              opacity: 0.65583;
-            }
-            35% {
-              opacity: 0.67807;
-            }
-            40% {
-              opacity: 0.26559;
-            }
-            45% {
-              opacity: 0.84693;
-            }
-            50% {
-              opacity: 0.96019;
-            }
-            55% {
-              opacity: 0.08594;
-            }
-            60% {
-              opacity: 0.20313;
-            }
-            65% {
-              opacity: 0.71988;
-            }
-            70% {
-              opacity: 0.53455;
-            }
-            75% {
-              opacity: 0.37288;
-            }
-            80% {
-              opacity: 0.71428;
-            }
-            85% {
-              opacity: 0.70419;
-            }
-            90% {
-              opacity: 0.7003;
-            }
-            95% {
-              opacity: 0.36108;
-            }
-            100% {
-              opacity: 0.24387;
-            }
-          }
+
           ${TEXT_SHADOW}
           body::after {
             content: " ";
@@ -175,7 +111,6 @@ exports.decorateTerm = (Term, { React, notify }) => {
       const overridenProps = {
         customCSS: `
         ${this.props.customCSS || ''}
-        ${TEXT_SHADOW}
         ${BOX_SHADOW}
         x-screen {
           animation: textShadow 1.6s infinite;
